@@ -17,30 +17,31 @@ function db(): PDO
         return $value;
     };
 
-    $jawsdb = getenv('JAWSDB_URL');
-    if ($jawsdb !== false && $jawsdb !== '') {
-        $parts = parse_url($jawsdb);
-        $host = $parts['host'] ?? '';
-        $port = (string) ($parts['port'] ?? 3306);
-        $name = ltrim($parts['path'] ?? '', '/');
-        $user = rawurldecode($parts['user'] ?? '');
-        $password = rawurldecode($parts['pass'] ?? '');
-    } else {
-        $host = $required('DB_HOST');
-        $port = getenv('DB_PORT') ?: '3306';
-        $name = $required('DB_NAME');
-        $user = $required('DB_USER');
-        $password = $required('DB_PASSWORD');
-    }
+    $dsn = sprintf(
+        'mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4',
+        $required('DB_HOST'),
+        getenv('DB_PORT') ?: '3306',
+        $required('DB_NAME')
+    );
 
-    $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4', $host, $port, $name);
-
-    $pdo = new PDO($dsn, $user, $password, [
+    $options = [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES => false,
         PDO::ATTR_STRINGIFY_FETCHES => false,
-    ]);
+    ];
+
+    $ca = getenv('DB_SSL_CA');
+    if ($ca !== false && $ca !== '') {
+        $path = sys_get_temp_dir() . '/aiven-ca.pem';
+        if (!is_file($path)) {
+            file_put_contents($path, $ca);
+        }
+        $options[PDO::MYSQL_ATTR_SSL_CA] = $path;
+        $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = true;
+    }
+
+    $pdo = new PDO($dsn, $required('DB_USER'), $required('DB_PASSWORD'), $options);
 
     return $pdo;
 }
