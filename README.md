@@ -217,55 +217,36 @@ Ces comptes n'existent que dans le jeu de données de démo. Les mots de passe r
 
 Les données de démo contiennent 5 menus, 19 plats, 14 allergènes, 8 commandes couvrant tous les statuts (dont une annulée et une en attente de retour de matériel) et 4 avis (validé, en attente, refusé).
 
-## Déploiement Heroku (mode conteneur)
+## Déploiement Render + Aiven + Atlas (mode conteneur)
 
-Le déploiement réutilise le `Dockerfile` du dépôt (pas de buildpack) : MySQL est fourni par l'add-on JawsDB, MongoDB par un cluster Atlas. Le fonctionnement local (`docker compose up`) n'est pas affecté par ce qui suit.
+Le déploiement réutilise le `Dockerfile` du dépôt (pas de buildpack) : MySQL est fourni par une base managée Aiven (connexion SSL obligatoire), MongoDB par un cluster Atlas. Le fonctionnement local (`docker compose up`) n'est pas affecté par ce qui suit.
 
-1. Créer l'application et passer sur la stack conteneur :
+1. Créer une base MySQL sur [Aiven](https://aiven.io) (offre gratuite). Récupérer dans sa page « Overview » : hôte, port, utilisateur, mot de passe, nom de la base, et télécharger le certificat CA (`ca.pem`).
+2. Importer le schéma et le jeu de démo (une seule fois), avec la connexion SSL :
    ```bash
-   heroku create <nom-app>
-   heroku stack:set container -a <nom-app>
+   mysql --ssl-ca=ca.pem -h <host> -P <port> -u <user> -p <base> < database/schema.sql
+   mysql --ssl-ca=ca.pem -h <host> -P <port> -u <user> -p <base> < database/seed.sql
    ```
-2. Ajouter MySQL avec l'add-on JawsDB (il positionne automatiquement `JAWSDB_URL`, lue par `app/config/database.php`) :
+3. Créer un cluster MongoDB Atlas (offre gratuite), autoriser les connexions entrantes (adresse `0.0.0.0/0`, ou les IP sortantes de Render) et créer un utilisateur dédié à l'application.
+4. Créer le service sur [Render](https://render.com) : Nouveau → Web Service → connecter le dépôt GitHub. Render détecte `render.yaml` à la racine (type `docker`, `docker/php/Dockerfile`, plan gratuit). Renseigner dans l'onglet « Environment » les variables marquées `sync: false` dans `render.yaml` :
+   - `APP_URL` : `https://<nom-du-service>.onrender.com`
+   - `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` : les valeurs Aiven de l'étape 1
+   - `DB_SSL_CA` : le contenu complet de `ca.pem`, collé tel quel (lu par `app/config/database.php`)
+   - `MONGODB_URI` : l'URI Atlas (`mongodb+srv://…`)
+   - `MONGO_DB` : `vite_gourmand_stats`
+5. Déployer (automatique à chaque push sur la branche connectée, ou bouton « Manual Deploy »).
+6. Lancer la première synchronisation MongoDB (à refaire après tout réimport du jeu de démo), depuis l'onglet « Shell » du service Render :
    ```bash
-   heroku addons:create jawsdb:kitefin -a <nom-app>
+   php bin/sync-stats.php
    ```
-3. Créer un cluster MongoDB Atlas (offre gratuite), autoriser les connexions entrantes (adresse `0.0.0.0/0`, ou les IP sortantes de l'app) et créer un utilisateur dédié à l'application.
-4. Définir les variables de production (aucune n'est écrite dans un fichier versionné) :
-   ```bash
-   heroku config:set \
-     APP_ENV=production \
-     APP_URL=https://<nom-app>.herokuapp.com \
-     MONGODB_URI="mongodb+srv://<utilisateur>:<mot-de-passe>@<cluster>/<base>" \
-     MONGO_DB=vite_gourmand_stats \
-     GEOCODER_URL=https://data.geopf.fr/geocodage/search \
-     -a <nom-app>
-   ```
-5. Déployer :
-   ```bash
-   git push heroku main
-   ```
-6. Importer le schéma et le jeu de démo dans la base JawsDB (une seule fois) :
-   ```bash
-   JAWSDB_URL=$(heroku config:get JAWSDB_URL -a <nom-app>)
-   HOST=$(echo "$JAWSDB_URL" | sed -E 's#mysql://[^:]+:[^@]+@([^:/]+).*#\1#')
-   USER=$(echo "$JAWSDB_URL" | sed -E 's#mysql://([^:]+):.*#\1#')
-   PASS=$(echo "$JAWSDB_URL" | sed -E 's#mysql://[^:]+:([^@]+)@.*#\1#')
-   NAME=$(echo "$JAWSDB_URL" | sed -E 's#.*/([^/?]+).*#\1#')
-   mysql -h "$HOST" -u "$USER" -p"$PASS" "$NAME" < database/schema.sql
-   mysql -h "$HOST" -u "$USER" -p"$PASS" "$NAME" < database/seed.sql
-   ```
-7. Lancer la première synchronisation MongoDB (à refaire après tout réimport du jeu de démo) :
-   ```bash
-   heroku run php bin/sync-stats.php -a <nom-app>
-   ```
-8. Parcours du jury : utiliser les comptes de démonstration listés ci-dessous (administrateur, employé, utilisateur).
+7. Parcours du jury : utiliser les comptes de démonstration listés ci-dessous (administrateur, employé, utilisateur).
 
 Durcissement activé par `APP_ENV=production` (voir `app/helpers.php`, `app/bootstrap.php`, `app/services/Session.php`) : affichage des erreurs PHP désactivé (page générique 500, erreur toujours journalisée côté serveur), en-tête `Content-Security-Policy`, cookie de session `Secure` en plus de `HttpOnly` et `SameSite=Lax`. Aucune clé applicative supplémentaire n'est nécessaire : le site utilise les sessions PHP natives (pas de JWT, pas de cookie chiffré).
 
-**Limites connues sur Heroku :**
-- Le système de fichiers est éphémère : les images de menus ajoutées depuis le back-office (`/admin/menus`) ne survivent pas à un redémarrage de dyno. Seules les images de démo déjà commitées dans `public/assets/img/` persistent.
-- Les sessions PHP natives sont stockées sur le disque local du dyno : au-delà d'un seul dyno web, ou après son redémarrage, les sessions ouvertes sont perdues (sans impact pour une démonstration).
+**Limites connues sur Render (plan gratuit) :**
+- Le système de fichiers est éphémère : les images de menus ajoutées depuis le back-office (`/admin/menus`) ne survivent pas à un redéploiement. Seules les images de démo déjà commitées dans `public/assets/img/` persistent.
+- Le service se met en veille après une période d'inactivité : la première requête qui le réveille peut prendre plusieurs dizaines de secondes.
+- Les sessions PHP natives sont stockées sur le disque local de l'instance : au-delà d'une seule instance, ou après son redémarrage, les sessions ouvertes sont perdues (sans impact pour une démonstration).
 
 ## Structure du dépôt
 
@@ -285,7 +266,7 @@ Durcissement activé par `APP_ENV=production` (voir `app/helpers.php`, `app/boot
 ├── docker/php/         Dockerfile, vhost Apache, entrypoint.sh (port $PORT sur Heroku)
 ├── public/             racine web (index.php, api/menus.php, assets)
 ├── docker-compose.yml
-├── heroku.yml           build du conteneur pour le déploiement Heroku
+├── render.yaml          build du conteneur pour le déploiement Render
 └── .env.example        modèle des variables d'environnement
 ```
 
