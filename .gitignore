@@ -1,4 +1,6 @@
 .env
+render.env
+ca.pem
 .idea/
 .vscode/
 *.log
