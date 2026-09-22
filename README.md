@@ -228,7 +228,11 @@ Le déploiement réutilise le `Dockerfile` du dépôt (pas de buildpack) : MySQL
    mysql --ssl-ca=ca.pem -h <host> -P <port> -u <user> -p <base> < database/seed.sql
    ```
 3. Créer un cluster MongoDB Atlas (offre gratuite), autoriser les connexions entrantes (adresse `0.0.0.0/0`, ou les IP sortantes de Render) et créer un utilisateur dédié à l'application.
-4. Créer le service sur [Render](https://render.com) : Nouveau → Web Service → connecter le dépôt GitHub. Render détecte `render.yaml` à la racine (type `docker`, `docker/php/Dockerfile`, plan gratuit). Renseigner dans l'onglet « Environment » les variables marquées `sync: false` dans `render.yaml` :
+4. Créer le service sur [Render](https://render.com) : Nouveau → Web Service → connecter le dépôt GitHub, runtime Docker. Le flux « Web Service » ne lit pas `render.yaml` (contrairement au flux « Blueprint ») : indiquer manuellement, dans les réglages du service (Settings → Build & Deploy) :
+   - **Dockerfile Path** : `docker/php/Dockerfile`
+   - **Docker Build Context Directory** : `.`
+
+   Renseigner ensuite dans l'onglet « Environment » les variables listées dans `render.yaml` (`sync: false`) :
    - `APP_URL` : `https://<nom-du-service>.onrender.com`
    - `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` : les valeurs Aiven de l'étape 1
    - `DB_SSL_CA` : le contenu complet de `ca.pem`, collé tel quel (lu par `app/config/database.php`)
