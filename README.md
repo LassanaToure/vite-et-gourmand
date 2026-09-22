@@ -250,15 +250,16 @@ Durcissement activé par `APP_ENV=production` (voir `app/helpers.php`, `app/boot
 
 ## Livrables ECF
 
-Le dossier `docs/livrables/` contient les documents demandés par le sujet, en complément du code :
+Le dossier `docs/` contient les documents demandés par le sujet, en complément du code, des fichiers SQL et de ce README :
 
 | Fichier | Contenu |
 |---|---|
-| `ECF_TPDeveloppeurWebEtWebMobile_copiearendre_TOURE_Lassana.docx` | Copie à rendre : résumé, cahier des charges, choix techniques, sécurité, veille, recherche, liens et identifiants |
 | `manuel-utilisation.pdf` | Présentation de l'application et parcours par rôle, avec les comptes de démonstration |
 | `charte-graphique.pdf` | Palette de couleurs, typographies, 3 maquettes bureau et 3 maquettes mobile |
 | `documentation-technique.pdf` | MCD, diagramme d'utilisation, diagramme de séquence, résumé du déploiement |
 | `documentation-gestion-de-projet.pdf` | Méthodologie, outil de suivi, récapitulatif des étapes |
+
+La copie à rendre (`ECF_TPDeveloppeurWebEtWebMobile_copiearendre_TOURE_Lassana.docx`) est déposée séparément, comme demandé par le sujet : elle n'est pas versionnée dans ce dépôt (voir `.gitignore`).
 
 Suivi de projet (Notion) : https://app.notion.com/p/8fa7c87c8de341fb96676bb516139c9b
 
@@ -277,7 +278,8 @@ Suivi de projet (Notion) : https://app.notion.com/p/8fa7c87c8de341fb96676bb51613
 │   └── helpers.php
 ├── bin/                sync-stats.php (resynchronisation MySQL vers MongoDB)
 ├── database/           schema.sql, seed.sql
-├── docker/php/         Dockerfile, vhost Apache, entrypoint.sh (port $PORT sur Heroku)
+├── docker/php/         Dockerfile, vhost Apache, entrypoint.sh (port $PORT dynamique)
+├── docs/               livrables ECF (manuel, charte graphique, documentations technique et projet)
 ├── public/             racine web (index.php, api/menus.php, assets)
 ├── docker-compose.yml
 ├── render.yaml          build du conteneur pour le déploiement Render
