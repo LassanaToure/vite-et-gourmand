@@ -8,4 +8,5 @@ public/assets/uploads/menus/*
 !public/assets/uploads/menus/.gitkeep
 /*.doc
 /*.pdf
+/*.docx
 /Figma/
