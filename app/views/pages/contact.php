@@ -32,11 +32,12 @@ $openings = array_filter($openings, static fn (string $line): bool => !str_ends_
         </div>
         <div class="card contact-form">
             <h2>Envoyer un message</h2>
-            <form method="post" action="<?= e(url('/contact')) ?>">
+            <?php partial('form-errors', ['errors' => $errors]) ?>
+            <form method="post" action="<?= e(url('/contact')) ?>" novalidate>
                 <?= csrf_field() ?>
-                <?php partial('field', ['id' => 'objet', 'label' => 'Objet / titre', 'placeholder' => 'Ex. : Demande de devis mariage', 'value' => input_string($_GET, 'objet')]) ?>
-                <?php partial('field', ['id' => 'message', 'label' => 'Votre message', 'type' => 'textarea', 'rows' => 6, 'placeholder' => 'Décrivez votre événement, vos besoins...']) ?>
-                <?php partial('field', ['id' => 'email', 'label' => 'Votre email', 'type' => 'email', 'autocomplete' => 'email', 'placeholder' => 'julie@exemple.fr']) ?>
+                <?php partial('field', ['id' => 'objet', 'label' => 'Objet / titre', 'placeholder' => 'Ex. : Demande de devis mariage', 'value' => $old['objet'] ?? input_string($_GET, 'objet'), 'error' => $errors['objet'] ?? null, 'extra' => ['maxlength' => '150']]) ?>
+                <?php partial('field', ['id' => 'message', 'label' => 'Votre message', 'type' => 'textarea', 'rows' => 6, 'placeholder' => 'Décrivez votre événement, vos besoins...', 'value' => $old['message'] ?? null, 'error' => $errors['message'] ?? null, 'extra' => ['maxlength' => '2000']]) ?>
+                <?php partial('field', ['id' => 'email', 'label' => 'Votre email', 'type' => 'email', 'autocomplete' => 'email', 'placeholder' => 'julie@exemple.fr', 'value' => $old['email'] ?? null, 'error' => $errors['email'] ?? null, 'extra' => ['maxlength' => '255']]) ?>
                 <button class="btn btn--block" type="submit">Envoyer <span aria-hidden="true">→</span></button>
             </form>
         </div>
