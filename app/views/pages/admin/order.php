@@ -94,6 +94,7 @@ $prestation = [
             <?php endif; ?>
 
             <?php if ($cancellable): ?>
+                <a class="btn btn--block btn--outline" href="<?= e($path . '/modifier') ?>">Modifier la commande</a>
                 <a class="btn btn--block btn--outline" href="<?= e($path . '/annuler') ?>" data-open-cancel>Annuler la commande</a>
                 <p class="form-note">Contactez d'abord le client (GSM : <a href="tel:<?= e($phone) ?>"><?= e($order['telephone_contact']) ?></a>).</p>
             <?php endif; ?>

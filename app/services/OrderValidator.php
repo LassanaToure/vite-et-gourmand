@@ -73,7 +73,7 @@ final class OrderValidator
         }
         $clean['nombre_personne'] = $people;
 
-        if ($input['accept'] !== '1') {
+        if (($options['require_accept'] ?? true) && $input['accept'] !== '1') {
             $errors['accept'] = 'Vous devez confirmer avoir pris connaissance des conditions du menu et des CGV.';
         }
 
