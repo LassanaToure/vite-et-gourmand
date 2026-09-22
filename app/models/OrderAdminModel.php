@@ -92,6 +92,65 @@ final class OrderAdminModel extends Model
         }
     }
 
+    public function update(int $orderId, array $data, array $quote, string $mode, string $reason, int $staffId): array
+    {
+        $pdo = $this->pdo();
+        $pdo->beginTransaction();
+
+        try {
+            $order = $this->lock($orderId);
+            if ($order === null) {
+                return $this->abort($pdo, 'notfound');
+            }
+            if (!OrderFlow::canCancel($order)) {
+                return $this->abort($pdo, 'status');
+            }
+
+            $menu = (new MenuModel($pdo))->find((int) $order['menu_id']);
+            if ($menu === null || $data['nombre_personne'] < (int) $menu['nombre_personne_minimum']) {
+                return $this->abort($pdo, 'minimum');
+            }
+
+            $unit = intdiv(
+                OrderPricing::cents($order['prix_menu']) + OrderPricing::cents($order['remise']),
+                max(1, (int) $order['nombre_personne'])
+            );
+            $pricing = OrderPricing::forUnit($unit, (int) $menu['nombre_personne_minimum'], $data['nombre_personne'], $quote);
+
+            $pdo->prepare(
+                'UPDATE commande SET date_prestation = :date_prestation, heure_livraison = :heure,
+                    adresse_prestation = :adresse, code_postal_prestation = :code_postal, ville_prestation = :ville,
+                    telephone_contact = :telephone, prix_menu = :prix_menu, remise = :remise,
+                    nombre_personne = :personnes, distance_km = :distance, distance_source = :source,
+                    prix_livraison = :livraison
+                WHERE commande_id = :id'
+            )->execute([
+                'date_prestation' => $data['date_prestation'],
+                'heure' => $data['heure_livraison'] . ':00',
+                'adresse' => $data['adresse'],
+                'code_postal' => $data['code_postal'],
+                'ville' => $data['ville'],
+                'telephone' => $data['telephone'],
+                'prix_menu' => self::decimal($pricing['menu']),
+                'remise' => self::decimal($pricing['discount']),
+                'personnes' => $data['nombre_personne'],
+                'distance' => number_format($pricing['km'], 1, '.', ''),
+                'source' => $pricing['source'],
+                'livraison' => self::decimal($pricing['delivery']),
+                'id' => $orderId,
+            ]);
+            $label = $mode === 'gsm' ? 'appel GSM' : 'e-mail';
+            $this->trace($orderId, $order['statut'], 'Modifiée par l\'équipe (contact : ' . $label . ') — ' . $reason, $staffId);
+            $pdo->commit();
+            (new OrderStatsSync($pdo))->sync($orderId);
+
+            return ['order' => $order, 'menu' => $menu, 'pricing' => $pricing];
+        } catch (Throwable $exception) {
+            $this->rollBackOnFailure($pdo);
+            throw $exception;
+        }
+    }
+
     public function cancel(int $orderId, string $mode, string $reason, int $staffId): array
     {
         $pdo = $this->pdo();
@@ -152,5 +211,10 @@ final class OrderAdminModel extends Model
         if ($pdo->inTransaction()) {
             $pdo->rollBack();
         }
+    }
+
+    private static function decimal(int $cents): string
+    {
+        return number_format($cents / 100, 2, '.', '');
     }
 }
