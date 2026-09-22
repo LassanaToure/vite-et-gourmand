@@ -1,0 +1,240 @@
+.admin-body {
+    background: var(--creme);
+}
+
+.admin {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.admin-topbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-5);
+    padding: var(--space-3) var(--gutter);
+    background: var(--bordeaux);
+    color: #fff;
+}
+
+.admin-topbar :focus-visible {
+    outline-color: #fff;
+}
+
+.admin-topbar__brand {
+    font-family: var(--font-titre);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+}
+
+.admin-topbar__brand span {
+    margin-left: var(--space-2);
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    font-family: var(--font-corps);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.admin-topbar__tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-5);
+    font-size: var(--fs-petit);
+}
+
+.admin-topbar__link {
+    color: #fff;
+    text-decoration: none;
+}
+
+.admin-topbar__link:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.admin-topbar__button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-size: inherit;
+}
+
+.admin-topbar__user small {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.admin__body {
+    display: grid;
+    flex: 1;
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.admin-sidebar {
+    padding: var(--space-3) var(--gutter);
+    background: var(--blanc-casse);
+    overflow-x: auto;
+}
+
+.admin-sidebar__list {
+    display: flex;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.admin-sidebar__link {
+    display: block;
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius-s);
+    font-size: var(--fs-petit);
+    font-weight: 500;
+    color: var(--anthracite);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.admin-sidebar__link:hover {
+    background: var(--creme);
+    color: var(--bordeaux);
+}
+
+.admin-sidebar__link[aria-current="page"] {
+    background: var(--bordeaux);
+    color: #fff;
+}
+
+.admin-main {
+    min-width: 0;
+    padding: var(--space-6) var(--gutter) var(--space-8);
+}
+
+.admin-main:focus {
+    outline: none;
+}
+
+@media (min-width: 900px) {
+    .admin__body {
+        grid-template-columns: 15rem minmax(0, 1fr);
+    }
+
+    .admin-sidebar {
+        padding: var(--space-6) var(--space-4);
+    }
+
+    .admin-sidebar__list {
+        flex-direction: column;
+    }
+}
+
+.admin-head {
+    margin-bottom: var(--space-6);
+}
+
+.admin-head h1 {
+    font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+}
+
+.admin-head p:not(.eyebrow) {
+    margin-top: var(--space-2);
+}
+
+.admin-head--split {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
+}
+
+.admin-back {
+    color: var(--or-texte);
+    text-decoration: none;
+}
+
+.admin-back:hover {
+    text-decoration: underline;
+}
+
+.admin-grid {
+    display: grid;
+    gap: var(--space-5);
+    align-items: start;
+}
+
+@media (min-width: 1100px) {
+    .admin-grid {
+        grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    }
+}
+
+.admin-stack {
+    display: grid;
+    gap: var(--space-5);
+    min-width: 0;
+}
+
+.admin-block {
+    min-width: 0;
+    padding: var(--space-5);
+    border-radius: var(--radius-m);
+}
+
+.admin-block h2 {
+    margin-bottom: var(--space-4);
+    font-size: 1.375rem;
+}
+
+.admin-fields {
+    display: grid;
+    gap: 0 var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+}
+
+.admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.admin-actions form {
+    margin: 0;
+}
+
+.dialog {
+    width: min(34rem, calc(100vw - 2rem));
+    padding: var(--space-6);
+    border: 0;
+    border-radius: var(--radius-l);
+    background: var(--blanc-casse);
+    color: var(--anthracite);
+    box-shadow: var(--ombre-flottante);
+}
+
+.dialog::backdrop {
+    background: rgba(30, 20, 22, 0.55);
+}
+
+.cancel-form__title {
+    margin-bottom: var(--space-3);
+    font-size: 1.5rem;
+}
+
+.cancel-form__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.cancel-page {
+    max-width: 40rem;
+}

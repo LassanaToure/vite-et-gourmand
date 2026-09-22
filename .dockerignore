@@ -1,0 +1,10 @@
+.git
+.env
+*.log
+Thumbs.db
+.DS_Store
+/*.doc
+/*.pdf
+Figma/
+public/assets/uploads/menus/*
+!public/assets/uploads/menus/.gitkeep

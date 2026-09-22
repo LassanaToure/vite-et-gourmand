@@ -1,0 +1,123 @@
+.admin-note {
+    margin-bottom: var(--space-4);
+    font-size: 0.9375rem;
+    color: var(--gris-texte);
+}
+
+.stats-filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    align-items: end;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+    padding: var(--space-4) var(--space-5);
+}
+
+.stats-filters .field {
+    margin: 0;
+}
+
+.stats-filters__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.stats-kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--space-4);
+    margin: 0 0 var(--space-4);
+}
+
+.stats-kpi {
+    padding: var(--space-4) var(--space-5);
+}
+
+.stats-kpi dt {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--gris-texte);
+}
+
+.stats-kpi dd {
+    margin: var(--space-1) 0 0;
+    font-family: var(--font-titre, "Playfair Display", serif);
+    font-size: 1.875rem;
+    line-height: 1.2;
+    color: var(--bordeaux);
+}
+
+.stats-kpi dd.stats-kpi__text {
+    font-size: 1.25rem;
+}
+
+.stats-kpi dd.stats-kpi__sub {
+    margin: 0;
+    font-family: inherit;
+    font-size: 0.875rem;
+    color: var(--gris-texte);
+}
+
+.stats-charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+    gap: var(--space-5);
+    margin: 0;
+}
+
+.stats-chart {
+    margin: 0;
+    padding: var(--space-5);
+}
+
+.stats-chart__title {
+    margin-bottom: var(--space-4);
+    font-family: var(--font-titre, "Playfair Display", serif);
+    font-size: 1.25rem;
+    color: var(--anthracite);
+}
+
+.stats-chart__list {
+    display: grid;
+    gap: var(--space-4);
+}
+
+.stats-chart__row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-1) var(--space-3);
+    align-items: center;
+}
+
+.stats-chart__label {
+    grid-column: 1 / -1;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.stats-chart__track {
+    height: 0.875rem;
+    border-radius: 999px;
+    background: var(--creme, #F5F0E6);
+    overflow: hidden;
+}
+
+.stats-chart__bar {
+    display: block;
+    height: 100%;
+    min-width: 0.25rem;
+    border-radius: 999px;
+    background: var(--bordeaux);
+}
+
+.stats-chart__bar--top {
+    background: var(--or);
+}
+
+.stats-chart__value {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    text-align: right;
+    white-space: nowrap;
+}

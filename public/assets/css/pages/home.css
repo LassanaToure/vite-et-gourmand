@@ -1,0 +1,57 @@
+.about__grid {
+    display: grid;
+    gap: var(--space-7);
+    align-items: center;
+}
+
+@media (min-width: 900px) {
+    .about__grid {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-9);
+    }
+}
+
+.about__image {
+    width: 100%;
+    aspect-ratio: 6 / 5;
+    object-fit: cover;
+    border-radius: var(--radius-l);
+    box-shadow: var(--ombre-carte);
+}
+
+.about__text .eyebrow {
+    margin-bottom: var(--space-3);
+}
+
+.about__text h2 {
+    margin-bottom: var(--space-5);
+}
+
+.about__text p + p {
+    margin-top: var(--space-4);
+}
+
+.about__text .signature {
+    margin-top: var(--space-5);
+    font-family: var(--font-titre);
+    font-size: 1.375rem;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--bordeaux);
+}
+
+.cta {
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.cta__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-5);
+}
+
+.cta__inner .eyebrow {
+    margin-bottom: 0;
+}

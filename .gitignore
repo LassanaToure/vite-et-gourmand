@@ -1,0 +1,11 @@
+.env
+.idea/
+.vscode/
+*.log
+Thumbs.db
+.DS_Store
+public/assets/uploads/menus/*
+!public/assets/uploads/menus/.gitkeep
+/*.doc
+/*.pdf
+/Figma/

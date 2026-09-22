@@ -1,0 +1,49 @@
+.legal h1 {
+    margin-bottom: var(--space-7);
+}
+
+.legal .lead {
+    margin-block: var(--space-4) var(--space-6);
+}
+
+.prose section + section {
+    margin-top: var(--space-7);
+}
+
+.prose h2 {
+    margin-bottom: var(--space-4);
+    font-size: clamp(1.375rem, 1.25rem + 0.5vw, 1.625rem);
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.prose p + p {
+    margin-top: var(--space-3);
+}
+
+.prose ul {
+    display: grid;
+    gap: var(--space-2);
+    margin: var(--space-4) 0;
+    padding: 0;
+    list-style: none;
+    color: var(--gris-texte);
+}
+
+.prose li {
+    position: relative;
+    padding-left: var(--space-5);
+}
+
+.prose li::before {
+    content: "›";
+    position: absolute;
+    left: var(--space-2);
+    font-weight: 600;
+    color: var(--or-texte);
+}
+
+.prose__note {
+    margin-top: var(--space-7);
+    font-size: 0.875rem;
+}

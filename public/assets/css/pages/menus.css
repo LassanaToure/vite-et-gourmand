@@ -1,0 +1,24 @@
+.menu-grid {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+}
+
+.menus__error {
+    margin-bottom: var(--space-5);
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-s);
+    background: rgba(155, 28, 28, 0.08);
+    color: var(--erreur);
+    font-weight: 500;
+}
+
+.menu-grid[aria-busy="true"] {
+    opacity: 0.6;
+}
+
+.menus__empty {
+    padding: var(--space-7) var(--space-5);
+    text-align: center;
+    font-size: 1.125rem;
+}

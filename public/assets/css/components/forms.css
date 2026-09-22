@@ -1,0 +1,111 @@
+.field {
+    margin-bottom: var(--space-5);
+}
+
+.field__label {
+    display: block;
+    margin-bottom: var(--space-2);
+    padding: 0;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gris-texte);
+}
+
+.field__optional {
+    letter-spacing: 0.04em;
+    text-transform: none;
+    font-weight: 400;
+}
+
+.field__control {
+    position: relative;
+}
+
+.input {
+    display: block;
+    width: 100%;
+    min-height: 3.25rem;
+    padding: 0.8rem 1.1rem;
+    border: 1px solid var(--bordure-champ);
+    border-radius: var(--radius-s);
+    background: #fff;
+    color: var(--anthracite);
+    font-size: 1rem;
+    line-height: 1.4;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+textarea.input {
+    resize: vertical;
+    min-height: 9rem;
+}
+
+select.input {
+    appearance: none;
+    padding-right: 2.75rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233A3A38' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.1rem;
+}
+
+.input::placeholder {
+    color: var(--gris-champ);
+    opacity: 1;
+}
+
+.input:hover {
+    border-color: var(--or-texte);
+}
+
+.input:focus-visible {
+    outline: 3px solid var(--bordeaux);
+    outline-offset: 2px;
+    border-color: var(--bordeaux);
+}
+
+.input:user-invalid {
+    border-color: var(--erreur);
+}
+
+.input--toggle {
+    padding-right: 3.5rem;
+}
+
+.field__toggle {
+    position: absolute;
+    top: 50%;
+    right: 0.4rem;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 0;
+    border-radius: var(--radius-s);
+    background: transparent;
+    color: var(--gris-texte);
+    transform: translateY(-50%);
+}
+
+.field__toggle:hover {
+    color: var(--bordeaux);
+}
+
+.field__hint {
+    margin-top: var(--space-2);
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.field-row {
+    display: grid;
+    gap: 0 var(--space-4);
+}
+
+@media (min-width: 640px) {
+    .field-row {
+        grid-template-columns: 1fr 1fr;
+    }
+}

@@ -1,0 +1,39 @@
+.filters {
+    margin-block: var(--space-7) var(--space-5);
+    padding: var(--space-5) var(--space-6);
+    border-radius: var(--radius-m);
+}
+
+.filters__grid {
+    display: grid;
+    gap: 0 var(--space-5);
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+}
+
+.filters__grid .field {
+    display: flex;
+    flex-direction: column;
+}
+
+.filters__grid .field > .input,
+.filters__grid .field > .filters__range-inputs {
+    margin-top: auto;
+}
+
+.filters__range-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+}
+
+.filters__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.filters__count {
+    margin-bottom: var(--space-5);
+    font-size: var(--fs-petit);
+    font-weight: 500;
+}

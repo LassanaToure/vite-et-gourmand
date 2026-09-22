@@ -1,0 +1,27 @@
+.badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.2rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.badge--theme {
+    background: rgba(110, 30, 44, 0.09);
+    color: var(--bordeaux);
+}
+
+.badge--diet {
+    background: var(--sauge-clair);
+    color: var(--sauge-texte);
+}
