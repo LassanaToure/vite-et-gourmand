@@ -248,6 +248,20 @@ Durcissement activé par `APP_ENV=production` (voir `app/helpers.php`, `app/boot
 - Le service se met en veille après une période d'inactivité : la première requête qui le réveille peut prendre plusieurs dizaines de secondes.
 - Les sessions PHP natives sont stockées sur le disque local de l'instance : au-delà d'une seule instance, ou après son redémarrage, les sessions ouvertes sont perdues (sans impact pour une démonstration).
 
+## Livrables ECF
+
+Le dossier `docs/livrables/` contient les documents demandés par le sujet, en complément du code :
+
+| Fichier | Contenu |
+|---|---|
+| `ECF_TPDeveloppeurWebEtWebMobile_copiearendre_TOURE_Lassana.docx` | Copie à rendre : résumé, cahier des charges, choix techniques, sécurité, veille, recherche, liens et identifiants |
+| `manuel-utilisation.pdf` | Présentation de l'application et parcours par rôle, avec les comptes de démonstration |
+| `charte-graphique.pdf` | Palette de couleurs, typographies, 3 maquettes bureau et 3 maquettes mobile |
+| `documentation-technique.pdf` | MCD, diagramme d'utilisation, diagramme de séquence, résumé du déploiement |
+| `documentation-gestion-de-projet.pdf` | Méthodologie, outil de suivi, récapitulatif des étapes |
+
+Suivi de projet (Notion) : https://app.notion.com/p/8fa7c87c8de341fb96676bb516139c9b
+
 ## Structure du dépôt
 
 ```
